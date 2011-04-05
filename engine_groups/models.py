@@ -28,14 +28,14 @@ class Account(Document):
     """
     name = StringField(max_length=100, required=True)
     local_id = StringField(max_length=20) # for demo, links to local user id
-    email = EmailField()
-    url = URLField()
-    description = StringField(max_length=20)
+    email = EmailField(required=True)
+    url = URLField(required=False)
+    description = StringField(max_length=500)
     permissions = ListField(StringField(max_length=20))
     api_key = StringField(max_length=64)
     api_password = StringField(max_length=64)
     members = ListField(EmbeddedDocumentField(Membership))
-    status = StringField(max_length=12, default=STATUS_OK )
+    status = StringField(max_length=12, default=STATUS_OK, required=True )
     
     meta = {
         'ordering': ['name']

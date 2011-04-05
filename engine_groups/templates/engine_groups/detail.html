@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load markup %}
+
+{% block title %}group: {{ object.name }}{% endblock %}
+
+{% block content %}
+
+<p><a href="{% url groups %}">all groups</a></p>
+
+<h1>{{ object.name }}</h1>
+
+<div>{{ object.description|textile }}</div>
+
+{% if user.is_staff %}
+<p><a href="{% url group-edit object.id %}">edit group</a></p>
+{% endif %}
+
+{% endblock %}
