@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}groups{% endblock %}
+
+{% block content %}
+
+<h1>Groups</h1>
+
+<ol>
+{% for object in objects %}
+
+    <li>{{ object.name }}</li>
+
+{% empty %}
+    <li>no groups found.</li>
+{% endfor %}
+</ol>
+{% endblock %}
