@@ -1,1 +1,2 @@
 mongoengine
+-e git://github.com/stephrdev/django-mongoforms.git#egg=django_mongoforms
