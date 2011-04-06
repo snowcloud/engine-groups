@@ -10,7 +10,7 @@ from mongoengine.queryset import OperationError, MultipleObjectsReturned, DoesNo
 from pymongo.objectid import ObjectId
 
 from engine_groups.models import Account
-from forms import AccountForm
+from forms import AccountForm, NewAccountForm
 
 def get_one_or_404(**kwargs):
     try:
@@ -42,8 +42,6 @@ def edit(request, object_id, template_name='engine_groups/edit.html'):
         form = AccountForm(request.POST, instance=object)
         if form.is_valid():
             g = form.save()
-            print '**********'
-            print g.name
             return HttpResponseRedirect(reverse('group', args=[object.id]))
     else:
         form = AccountForm(instance=object)
@@ -60,14 +58,12 @@ def edit(request, object_id, template_name='engine_groups/edit.html'):
 def new(request, template_name='engine_groups/edit.html'):
     
     if request.method == 'POST':
-        form = AccountForm(request.POST)
+        form = NewAccountForm(request.POST)
         if form.is_valid():
             g = form.save()
-            print '**********'
-            print g.name
             return HttpResponseRedirect(reverse('group', args=[g.id]))
     else:
-        form = AccountForm()
+        form = NewAccountForm()
     
     template_context = {'form': form}
 
