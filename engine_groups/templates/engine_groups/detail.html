@@ -5,14 +5,18 @@
 
 {% block content %}
 
-<p><a href="{% url groups %}">all groups</a></p>
+<p><a href="{% url groups %}">all groups</a>
+{% if user.is_staff %} | 
+    <a href="{% url group-edit object.id %}">edit group</a>
+{% endif %}
+</p>
 
 <h1>{{ object.name }}</h1>
 
 <div>{{ object.description|textile }}</div>
 
-{% if user.is_staff %}
-<p><a href="{% url group-edit object.id %}">edit group</a></p>
-{% endif %}
+<p><a href="{% url curations-for-group object.id %}">See latest group curations</a></p>
+
+
 
 {% endblock %}
