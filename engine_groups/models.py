@@ -13,6 +13,7 @@ STATUS_OK = 'ok'
 STATUS_SUSPENDED = 'suspended'
 STATUS_CLOSED = 'closed'
 
+
 def get_account(local_id):
     """docstring for get_account"""
     return Account.objects.get(local_id=str(local_id))

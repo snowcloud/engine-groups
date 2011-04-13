@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markup %}
+{% load markup utils %}
 
 {% block title %}group: {{ object.name }}{% endblock %}
 
@@ -15,7 +15,11 @@
 
 <div>{{ object.description|textile }}</div>
 
-<p><a href="{% url curations-for-group object.id %}">See latest group curations</a></p>
+<p>Account ID: {{ object.id }}</p>
+
+{% include "engine_groups/detail-add.html" %}
+
+</div>
 
 
 
