@@ -18,8 +18,9 @@ def get_account(local_id):
     """docstring for get_account"""
     return Account.objects.get(local_id=str(local_id))
 
-class Membership(EmbeddedDocument):
+class Membership(Document):
     member = ReferenceField('Account', required=True)
+    parent_account= ReferenceField('Account', required=True)
     role = StringField(max_length=20, required=True, default=MEMBER_ROLE)
 
     def __unicode__(self):
@@ -38,7 +39,7 @@ class Account(Document):
     permissions = ListField(StringField(max_length=20))
     api_key = StringField(max_length=64)
     api_password = StringField(max_length=64)
-    members = ListField(EmbeddedDocumentField(Membership))
+    members = ListField(ReferenceField(Membership))
     status = StringField(max_length=12, default=STATUS_OK, required=True )
     
     meta = {
