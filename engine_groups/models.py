@@ -16,7 +16,10 @@ STATUS_CLOSED = 'closed'
 
 def get_account(local_id):
     """docstring for get_account"""
-    return Account.objects.get(local_id=str(local_id))
+    try:
+        return Account.objects.get(local_id=str(local_id))
+    except Account.DoesNotExist:
+        return None
 
 class Membership(Document):
     member = ReferenceField('Account', required=True)
