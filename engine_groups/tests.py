@@ -71,24 +71,8 @@ class CollectionsTest(AccountsBaseTest):
 
     def test_creation(self):
 
-        res1 = Resource.objects.create(
-            title='blah', 
-            tags=['blue', 'red'],
-            author=self.humph
-            )
-        res2 = Resource.objects.create(
-            title='blah 2', 
-            tags=['green', 'red'],
-            author=self.humph
-            )
-        res3 = Resource.objects.create(
-            title='blah 3', 
-            tags=['green', 'red'],
-            author=self.jorph
-            )
-            
         c = Collection.objects.create(name='Test Collection', owner=self.humph)
-        print 'collection', c
+        self.assertEqual(1, Collection.objects(owner=self.humph).count())
 
 class AccountsTest(AccountsBaseTest):
     def test_account(self):
@@ -111,8 +95,8 @@ class AccountsTest(AccountsBaseTest):
         self.group.save()
         self.assertEqual(len(self.group.members), 3)
 
-        print self.group
-        print [m for m in self.group.members]
+        # print self.group
+        # print [m for m in self.group.members]
         
         
         
