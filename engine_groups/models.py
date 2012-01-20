@@ -35,7 +35,7 @@ class Account(Document):
     
     """
     name = StringField(max_length=100, required=True)
-    local_id = StringField(max_length=20) # for demo, links to local user id
+    local_id = StringField(max_length=20, unique=True) # for demo, links to local user id
     email = EmailField(required=True)
     url = URLField(required=False)
     description = StringField(max_length=500)
