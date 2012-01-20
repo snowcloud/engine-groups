@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from mongoengine.connection import _get_db as get_db
 from mongoengine.django.tests import MongoTestCase
 
+from depot.models import Resource
 from engine_groups.models import Account, Membership, MEMBER_ROLE, ADMIN_ROLE
 from engine_groups.collections import Collection
 
@@ -69,8 +70,25 @@ class AccountsBaseTest(MongoTestCase):
 class CollectionsTest(AccountsBaseTest):
 
     def test_creation(self):
-        c = Collection()
-        # print 'wulp', c
+
+        res1 = Resource.objects.create(
+            title='blah', 
+            tags=['blue', 'red'],
+            author=self.humph
+            )
+        res2 = Resource.objects.create(
+            title='blah 2', 
+            tags=['green', 'red'],
+            author=self.humph
+            )
+        res3 = Resource.objects.create(
+            title='blah 3', 
+            tags=['green', 'red'],
+            author=self.jorph
+            )
+            
+        c = Collection.objects.create(name='Test Collection', owner=self.humph)
+        print 'collection', c
 
 class AccountsTest(AccountsBaseTest):
     def test_account(self):
