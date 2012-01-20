@@ -42,7 +42,7 @@ class Account(Document):
     permissions = ListField(StringField(max_length=20))
     api_key = StringField(max_length=64)
     api_password = StringField(max_length=64)
-    members = ListField(ReferenceField(Membership))
+    members = ListField(ReferenceField(Membership), default=list)
     status = StringField(max_length=12, default=STATUS_OK, required=True )
     
     meta = {
@@ -56,6 +56,10 @@ class Account(Document):
     def __unicode__(self):
         return self.name
     
+    def add_member(self, member, role=MEMBER_ROLE):
+        m = Membership.objects.create(member=member, parent_account=self, role=role)
+        self.members.append(m)
+        
     # def save(self, *args, **kwargs):
     #     if not self.slug:
     #         self.slug = slugify(self.name)
