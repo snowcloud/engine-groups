@@ -6,6 +6,9 @@ from django.template.defaultfilters import slugify
 from mongoengine import *
 from mongoengine.django.auth import User
 
+# dependancy loop
+# from depot.models import Location
+
 MEMBER_ROLE = 'member'
 ADMIN_ROLE = 'admin'
 MENTOR_ROLE = 'mentor'
@@ -26,6 +29,10 @@ class Membership(Document):
     parent_account= ReferenceField('Account', required=True)
     role = StringField(max_length=20, required=True, default=MEMBER_ROLE)
 
+    meta = {
+        'allow_inheritance': False
+    }
+
     def __unicode__(self):
         return u'%s, %s' % (self.member.name, self.role)
 
@@ -44,11 +51,12 @@ class Account(Document):
     api_password = StringField(max_length=64)
     members = ListField(ReferenceField(Membership), default=list)
     status = StringField(max_length=12, default=STATUS_OK, required=True )
-    
+    collections = ListField(ReferenceField('Collection'), default=list)
+
     meta = {
-        'ordering': ['name']
+        'ordering': ['name'],
+        'allow_inheritance': False
     }
-            
 
     # created_by = ReferenceField(User)
     # created_at = DateTimeField(default=datetime.datetime.now)
@@ -57,14 +65,63 @@ class Account(Document):
         return self.name
     
     def add_member(self, member, role=MEMBER_ROLE):
-        m = Membership.objects.create(member=member, parent_account=self, role=role)
-        self.members.append(m)
-        
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.name)
-    #     return super(Group, self).save(*args, **kwargs)
+        found = False
+        for obj in self.members:
+            found = obj.member.id == member.id
+            if found:
+                break
+        if not found:
+            m = Membership.objects.create(member=member, parent_account=self, role=role)
+            self.members.append(m)
+
+    def add_to_collection(self, coll):
+        if coll not in self.collections:
+            self.collections.append(coll)
+            self.save()
+
+class CollectionMember(Document):
+    account = ReferenceField('Account', required=True)
+    collection= ReferenceField('Collection', required=True)
+    role = StringField(max_length=20, required=True, default=MEMBER_ROLE)
+
+    meta = {
+        'allow_inheritance': False
+    }
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.account.name, self.role)
+
+class Collection(Document):
+    """
+    An account can be held 
     
-    # @permalink
-    # def get_absolute_url(self):
-    #     return 'group_detail', (), {'id': self.id}
+    """
+    name = StringField(max_length=100, required=True)
+    owner = ReferenceField('Account', required=True)
+    tags = ListField(StringField(max_length=96), default=list)
+    # locations = ListField(ReferenceField(Location), default=list)
+    accounts = ListField(ReferenceField(CollectionMember), default=list)
+
+    meta = {
+        'ordering': ['name'],
+        'allow_inheritance': False
+    }
+
+    def add_accounts(self, accts, role=MEMBER_ROLE):
+        for acct in accts:
+            self.add_account(acct)
+            acct.add_to_collection(self)
+
+    def add_account(self, acct, role=MEMBER_ROLE):
+        found = False
+        for obj in self.accounts:
+            found = obj.account.id == acct.id
+            if found:
+                break
+        if not found:
+            m = CollectionMember.objects.create(account=acct, collection=self, role=role)
+            self.accounts.append(m)
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.name, self.owner)
+
