@@ -3,7 +3,7 @@
 engine-groups/tests.py
 """
 
-import os
+import subprocess
 
 from django.contrib.auth.models import User
 from mongoengine.connection import _get_db as get_db
@@ -23,13 +23,22 @@ def _dump_collections(collection_names=None):
     if collection_names is None:
         collection_names = [coll for coll in get_db().collection_names() if coll != 'system.indexes']
     for coll in collection_names:
-        os.system('mongoexport -d {0} -c {1} -o output_{1}.json'.format(get_db().name, coll))
+        subprocess.call([
+            'mongoexport', 
+            '-d', '%s' % get_db().name, 
+            '-c', '%s' % coll, 
+            '-o', 'output_%s.json' % coll])
 
 def _load_collections(collection_names=None, drop='--drop'):
     if collection_names is None:
         collection_names = [coll for coll in get_db().collection_names() if coll != 'system.indexes']
     for coll in collection_names:
-        os.system('mongoimport -d {0} -c {1} --file output_{1}.json {2}'.format(get_db().name, coll, drop))
+        subprocess.call([
+            'mongoimport', 
+            '-d', '%s' % get_db().name, 
+            '-c', '%s' % coll, 
+            '--file', 'output_%s.json' % coll, 
+            '%s' % drop])
 
 def _print_db_info():
     """docstring for _print_db_info"""
