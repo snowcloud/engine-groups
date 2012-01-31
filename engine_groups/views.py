@@ -46,7 +46,7 @@ def edit(request, object_id, template_name='engine_groups/edit.html'):
     else:
         form = AccountForm(instance=object)
     
-    template_context = {'form': form}
+    template_context = {'form': form, 'new': False}
 
     return render_to_response(
         template_name,
@@ -65,7 +65,7 @@ def new(request, template_name='engine_groups/edit.html'):
     else:
         form = NewAccountForm()
     
-    template_context = {'form': form}
+    template_context = {'form': form, 'new': True}
 
     return render_to_response(
         template_name,
