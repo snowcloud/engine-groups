@@ -12,6 +12,7 @@ class AccountForm(MongoForm):
         fields = ('name', 'email', 'description', 'local_id')
 
     description = forms.CharField(widget=forms.Textarea, required=False)
+    local_id = forms.CharField(widget=forms.HiddenInput, help_text='do not change this!')
 
 class NewAccountForm(MongoForm):
     class Meta:
@@ -22,6 +23,7 @@ class NewAccountForm(MongoForm):
     username = forms.CharField(required=False)
     password = forms.CharField(widget=forms.PasswordInput, required=False)
     password2 = forms.CharField(widget=forms.PasswordInput, required=False, label='Password (again)')
+    local_id = forms.CharField(widget=forms.HiddenInput, required=False)
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -31,6 +33,7 @@ class NewAccountForm(MongoForm):
         self.password = cleaned_data.get('password')
         self.password2 = cleaned_data.get('password2')
         # subject = cleaned_data.get("subject")
+
 
         if local_id and self.username:
             raise forms.ValidationError("Please enter a local id or a username and passwords, but not both!")
