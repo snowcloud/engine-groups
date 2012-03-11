@@ -1,3 +1,5 @@
+_This application is about to be moved into the main Engineclub repo and will be removed_
+
 engine-groups
 ============
 :Info: See `the Engineclub site <http://engineclub.org>`_ for more information. See `github <http://github.com/snowcloud/engineclub/>`_ for the latest source.
