@@ -1,6 +1,6 @@
-*This application is about to be moved into the main Engineclub repo and will be removed*
+**This application is about to be moved into the main Engineclub repo and will be removed**
 
-engine-groups
+engine-groups - DISCONTINUED
 ============
 :Info: See `the Engineclub site <http://engineclub.org>`_ for more information. See `github <http://github.com/snowcloud/engineclub/>`_ for the latest source.
 :Author: Derek Hoy <derek@snowcloud.co.uk>
